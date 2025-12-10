@@ -1,0 +1,32 @@
+{
+  "accountAssociation": {
+    "header": "TODO_REPLACE_WITH_BASE64_HEADER",
+    "payload": "TODO_REPLACE_WITH_BASE64_PAYLOAD",
+    "signature": "TODO_REPLACE_WITH_BASE64_SIGNATURE"
+  },
+  "miniapp": {
+    "version": "1",
+    "name": "FlashDrill",
+    "homeUrl": "https://flashdrill-miniapp.vercel.app/",
+    "iconUrl": "https://flashdrill-miniapp.vercel.app/assets/icon.png",
+    "splashImageUrl": "https://flashdrill-miniapp.vercel.app/assets/splash.png",
+    "splashBackgroundColor": "#020617",
+    "subtitle": "Tiny flashcards you can clear in a minute.",
+    "description": "FlashDrill is a micro flashcard trainer: flip, mark again or got it, and keep a simple streak of what you\u2019ve learned.",
+    "primaryCategory": "education",
+    "tags": [
+      "flashcards",
+      "learn",
+      "study"
+    ],
+    "heroImageUrl": "https://flashdrill-miniapp.vercel.app/assets/hero.png",
+    "tagline": "Tiny flashcards you can clear in a minute.",
+    "ogTitle": "FlashDrill",
+    "ogDescription": "FlashDrill is a micro flashcard trainer: flip, mark again or got it, and keep a simple streak of what you\u2019ve learned.",
+    "ogImageUrl": "https://flashdrill-miniapp.vercel.app/assets/hero.png",
+    "screenshotUrls": [
+      "https://flashdrill-miniapp.vercel.app/assets/screenshot-1.png"
+    ],
+    "noindex": true
+  }
+}
