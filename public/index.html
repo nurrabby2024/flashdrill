@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>FlashDrill</title>
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="FlashDrill" />
+  <meta property="og:description" content="FlashDrill is a micro flashcard trainer: flip, mark again or got it, and keep a simple streak of what you’ve learned." />
+  <meta property="og:image" content="https://flashdrill-miniapp.vercel.app/assets/hero.png" />
+  <meta property="og:url" content="https://flashdrill-miniapp.vercel.app/" />
+  <meta property="og:type" content="website" />
+
+  <!-- Farcaster Mini App embed -->
+  <meta
+    name="fc:miniapp"
+    content='{
+      "version":"1",
+      "imageUrl":"https://flashdrill-miniapp.vercel.app/assets/embed-3x2.png",
+      "button":{
+        "title":"FlashDrill",
+        "action":{
+          "type":"launch_frame",
+          "name":"FlashDrill",
+          "url":"https://flashdrill-miniapp.vercel.app/",
+          "splashImageUrl":"https://flashdrill-miniapp.vercel.app/assets/splash.png",
+          "splashBackgroundColor":"#020617"
+        }
+      }
+    }'
+  />
+
+  <!-- Backward-compatible Frame meta -->
+  <meta
+    name="fc:frame"
+    content='{
+      "version":"1",
+      "imageUrl":"https://flashdrill-miniapp.vercel.app/assets/embed-3x2.png",
+      "button":{
+        "title":"FlashDrill",
+        "action":{
+          "type":"launch_frame",
+          "name":"FlashDrill",
+          "url":"https://flashdrill-miniapp.vercel.app/",
+          "splashImageUrl":"https://flashdrill-miniapp.vercel.app/assets/splash.png",
+          "splashBackgroundColor":"#020617"
+        }
+      }
+    }'
+  />
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #020617, #020617 50%, #000000 100%);
+      color: #e5e7eb;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .card {
+      background: rgba(15, 23, 42, 0.96);
+      border-radius: 24px;
+      padding: 18px 16px 14px;
+      max-width: 420px;
+      width: 100%;
+      box-shadow: 0 22px 50px rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 620px;
+    }
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .title {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+    .env-pill {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      color: #9ca3af;
+    }
+    .subtitle {
+      font-size: 0.82rem;
+      color: #9ca3af;
+    }
+    .deck-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
+    .deck-row button {
+      border-radius: 999px;
+      border: none;
+      padding: 4px 10px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      background: rgba(15, 23, 42, 0.9);
+      color: #e5e7eb;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+    }
+    .deck-row button:active {
+      transform: translateY(1px) scale(0.97);
+    }
+    .card-shell {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 0;
+    }
+    .flashcard {
+      width: 100%;
+      min-height: 180px;
+      border-radius: 18px;
+      background: radial-gradient(circle at top left, #111827, #020617);
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      padding: 14px 14px 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .flashcard-type {
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #9ca3af;
+    }
+    .flashcard-text {
+      font-size: 0.98rem;
+      line-height: 1.4;
+      white-space: pre-wrap;
+    }
+    .flip-hint {
+      font-size: 0.76rem;
+      color: #6b7280;
+    }
+    .controls {
+      display: flex;
+      gap: 8px;
+      margin-top: 6px;
+    }
+    .ctrl-btn {
+      flex: 1;
+      border-radius: 999px;
+      border: none;
+      padding: 8px 0;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+    .ctrl-btn.primary {
+      background: linear-gradient(135deg, #22c55e, #14b8a6);
+      color: #020617;
+      box-shadow: 0 10px 24px rgba(34, 197, 94, 0.55);
+    }
+    .ctrl-btn.secondary {
+      background: rgba(15, 23, 42, 0.96);
+      color: #e5e7eb;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+    }
+    .ctrl-btn.danger {
+      background: rgba(239, 68, 68, 0.12);
+      color: #fecaca;
+      border: 1px solid rgba(248, 113, 113, 0.5);
+    }
+    .stats-row {
+      font-size: 0.76rem;
+      color: #9ca3af;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 4px;
+      border-top: 1px dashed rgba(55, 65, 81, 0.8);
+    }
+    .stats-row strong {
+      color: #e5e7eb;
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <header>
+      <div class="header-row">
+        <div class="title">FlashDrill</div>
+        <div class="env-pill" id="env-label">web</div>
+      </div>
+      <p class="subtitle">Tiny flashcards you can clear in a minute.</p>
+    </header>
+
+    <section class="deck-row">
+      <span id="deck-label">Deck: Core prompts</span>
+      <button id="shuffle-btn">Shuffle deck</button>
+    </section>
+
+    <section class="card-shell">
+      <article class="flashcard" id="flashcard">
+        <div>
+          <div class="flashcard-type" id="card-side-label">Question</div>
+          <div class="flashcard-text" id="card-text">Loading...</div>
+        </div>
+        <div class="flip-hint" id="flip-hint">Tap Flip to see the answer.</div>
+      </article>
+    </section>
+
+    <section class="controls">
+      <button class="ctrl-btn secondary" id="flip-btn">Flip</button>
+      <button class="ctrl-btn danger" id="again-btn">Again</button>
+      <button class="ctrl-btn primary" id="gotit-btn">Got it</button>
+    </section>
+
+    <footer class="stats-row">
+      <span id="progress-label">0 / 0 today</span>
+      <span id="streak-label">Streak: 0</span>
+    </footer>
+  </main>
+
+  <script src="/flashdrill-ui.js"></script>
+  <script type="module" src="/script.js"></script>
+</body>
+</html>
